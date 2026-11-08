@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AL Tools – Support</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1d1d1f; --muted:#6e6e73; --bg:#fff; --card:#f5f5f7; --accent:#0a66ff; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#f5f5f7; --muted:#a1a1a6; --bg:#000; --card:#1c1c1e; --accent:#3d8bff; } }
+  body { margin:0; font: 17px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--fg); background:var(--bg); }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: 34px; margin: 0 0 4px; }
+  h2 { font-size: 22px; margin: 36px 0 10px; }
+  h3 { font-size: 17px; margin: 22px 0 6px; }
+  p.meta { color: var(--muted); margin: 0 0 28px; }
+  .card { background: var(--card); border-radius: 14px; padding: 18px 20px; margin: 18px 0; }
+  code { font: 15px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--card); padding: 2px 6px; border-radius: 6px; }
+  pre { background: var(--card); padding: 14px 16px; border-radius: 12px; overflow-x: auto; font-size: 14px; }
+  a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+  nav a { margin-right: 18px; }
+  footer { color: var(--muted); font-size: 14px; margin-top: 56px; }
+</style>
+</head>
+<body>
+<main>
+  <nav><a href="index.html">AL Tools</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav>
+  <h1>Support</h1>
+  <p class="meta">AL Tools for iPhone, iPad and Mac</p>
+
+  <div class="card">
+    Need help? Email <a href="mailto:ale.zilberman@gmail.com">ale.zilberman@gmail.com</a>. Please include the app version
+    (Security tab → About), your device and iOS/macOS version, and the text of any error message.
+  </div>
+
+  <h2>What AL Tools does</h2>
+  <p>AL Tools is an SSH client for your own Linux servers. It gives you a file browser with SFTP transfers (including an administrator mode for protected folders), a terminal that keeps running on the server between visits, and an AI Workspace that drives the Codex or Claude Code command-line tools installed on your server. Everything runs on the server; the app only displays it.</p>
+
+  <h2>Requirements</h2>
+  <p>A server reachable over SSH (port 22 or another port) with a user account and <code>python3</code> 3.7 or newer. For the persistent terminal, <code>tmux</code> on the server is recommended. For the AI Workspace, the <code>codex</code> or <code>claude</code> CLI must be installed on the server and signed in under your own account; AL Tools does not include or provide access to any AI model.</p>
+
+  <h2>Getting started</h2>
+  <p>Open the <strong>Servers</strong> tab and add your server's address, port and user name. On first connection the app shows the server's host-key fingerprint; compare it with your server and accept it once. You can then sign in with a password or generate an SSH key in the app and install its public half on the server. Use <strong>Browse</strong> for files, <strong>Terminal</strong> for a shell, and <strong>AI</strong> to choose a workspace folder and a CLI.</p>
+
+  <h2>Common problems</h2>
+
+  <h3>"Check CLI" says the tool is missing</h3>
+  <p>Non-interactive SSH sessions often have a shorter <code>PATH</code> than your terminal. Enter the full path to the executable in the chat's Workspace settings (for example <code>/home/you/.local/bin/codex</code>), or add its folder to <code>~/.profile</code> rather than <code>~/.bashrc</code>.</p>
+
+  <h3>The AI run stops immediately, or saved conversations are missing</h3>
+  <p>The CLI must be able to write its own session files. Check that <code>~/.codex</code> (or <code>~/.claude</code>) and everything under it belongs to your user and is writable — running the CLI once with <code>sudo</code> is the usual cause of root-owned files there:</p>
+  <pre>find ~/.codex ! -user "$(id -un)" -ls | head
+sudo chown -R "$(id -un)" ~/.codex</pre>
+  <p>Also make sure the CLI is signed in on the server (<code>codex login</code> or <code>claude</code>).</p>
+
+  <h3>"The CLI bridge did not start on the server"</h3>
+  <p><code>python3</code> is not installed or not on the path for SSH sessions, or the workspace folder is not writable. Run <code>python3 --version</code> over SSH to confirm.</p>
+
+  <h3>Host key changed</h3>
+  <p>The app refuses to connect if a server's host key differs from the one you accepted earlier, because that can indicate an interception. If you reinstalled the server or rotated its keys, remove the saved identity in the Security tab and accept the new fingerprint.</p>
+
+  <h3>Terminal does not persist between visits</h3>
+  <p>Install <code>tmux</code> on the server (<code>sudo apt install tmux</code> on Debian/Ubuntu). Without it the shell still works but ends when the connection drops.</p>
+
+  <h3>Where are my downloads?</h3>
+  <p>In the Downloads screen inside the app, and in the Files app under On My iPhone/iPad → AL Tools. On Mac they are in your Downloads folder under "AL Tools".</p>
+
+  <h2>Privacy</h2>
+  <p>AL Tools collects no data and has no servers of its own. See the <a href="privacy.html">privacy policy</a>.</p>
+
+  <footer>© 2026 AL Tools. Codex is a product of OpenAI; Claude Code is a product of Anthropic. They are referenced only to describe compatibility.</footer>
+</main>
+</body>
+</html>
